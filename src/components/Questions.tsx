@@ -1,15 +1,39 @@
 import React from "react";
-import questions from "../types/questions.ts";
 
-const Question: React.FC = () => {
-  // Używanie konkretnych właściwości obiektu, a nie całego obiektu
+interface QuestionProps {
+  text: string;
+  answerlist: string[];
+  onAnswerClick: (index: number) => void;
+  isCorrect: boolean | null;
+  selectedAnswerIndex: number | null;
+}
+
+const Question: React.FC<QuestionProps> = ({
+  text,
+  answerlist,
+  onAnswerClick,
+  isCorrect,
+  selectedAnswerIndex,
+}) => {
   return (
-    <div className="answer">
-      <h2>{questions[0].text}</h2>
-      <ul className="no-bullets">
-        {questions[0].answers.map((answer, index) => (
-          <li key={index}>
-            <button>{answer}</button>
+    <div id="question">
+      <h2>{text}</h2>
+      <ul className="no-bullets" id="answers">
+        {answerlist.map((answer, index) => (
+          <li key={index} className="answer">
+            <button
+              className={
+                selectedAnswerIndex === index && isCorrect !== null
+                  ? isCorrect
+                    ? "correct"
+                    : "wrong"
+                  : ""
+              }
+              onClick={() => onAnswerClick(index)}
+              disabled={selectedAnswerIndex !== null}
+            >
+              {answer}
+            </button>
           </li>
         ))}
       </ul>
